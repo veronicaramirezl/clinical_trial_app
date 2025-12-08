@@ -159,7 +159,12 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         Serving Size: 1 cup (228 g)
         Servings Per Container: 2
         Calories: 260
-        Carbs: 31 g
+        Total Fat: 12 g
+        Saturated Fat: 3 g
+        Cholesterol: 30 mg
+        Sodium: 660 mg
+        Total Carbohydrate: 31 g
+        Sugars: 5 g
         Protein: 5 g
         """)
 
