@@ -98,9 +98,8 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         elif insurance == "No":
             insurance_type = "None"
 
-        english = st.radio("7. English proficiency: *", 
-                          ["", "Poor", "Fair", "Good", "Very good", "Fluent"],
-                          index=0)
+        english = st.selectbox("7. English proficiency: *", 
+                          ["", "Poor", "Fair", "Good", "Very good", "Fluent"])
 
         income = st.selectbox("8. Annual household income: *", [
             "",
@@ -118,9 +117,8 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         # ---------------------------------------
         st.markdown("#### B. Health & Healthcare Access")
 
-        health_status = st.radio("9. Overall health: *", 
-                                 ["", "Poor", "Fair", "Good", "Very good", "Excellent"],
-                                 index=0)
+        health_status = st.selectbox("9. Overall health: *", 
+                                 ["", "Poor", "Fair", "Good", "Very good", "Excellent"])
 
         chronic = st.radio("10. Chronic conditions: *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
@@ -136,36 +134,37 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         # C. TRUST ONLINE INFO
         # ---------------------------------------
         st.markdown("#### C. Trust in Online Health Information")
-        st.caption("Rate your agreement.")
+        st.caption("Rate your agreement (1 = Strongly Disagree, 5 = Strongly Agree).")
 
-        tohi_options = ["", "Strongly Disagree", "Disagree", "Agree", "Strongly Agree"]
+        tohi_options = ["", "1 - Strongly Disagree", "2 - Disagree", "3 - Neutral", "4 - Agree", "5 - Strongly Agree"]
 
-        trust_web_1 = st.radio("12. I trust the information I find online. *", options=tohi_options, index=0, horizontal=True)
-        trust_web_2 = st.radio("13. I feel confident in online health accuracy. *", options=tohi_options, index=0, horizontal=True)
-        trust_web_3 = st.radio("14. I would follow online medical advice. *", options=tohi_options, index=0, horizontal=True)
+        trust_web_1 = st.selectbox("12. I trust the information I find online. *", options=tohi_options)
+        trust_web_2 = st.selectbox("13. I feel confident in online health accuracy. *", options=tohi_options)
+        trust_web_3 = st.selectbox("14. I would follow online medical advice. *", options=tohi_options)
 
         # ---------------------------------------
         # D. MISTRUST
         # ---------------------------------------
         st.markdown("#### D. Views on Healthcare")
-        st.caption("Rate your agreement.")
+        st.caption("Rate your agreement (1 = Strongly Disagree, 5 = Strongly Agree).")
 
-        mistrust_1 = st.radio("15. You cannot trust doctors to tell the truth. *", options=tohi_options, index=0, horizontal=True)
-        mistrust_2 = st.radio("16. Doctors care more about convenience than patient needs. *", options=tohi_options, index=0, horizontal=True)
-        mistrust_3 = st.radio("17. Health professionals do not always keep information private. *", options=tohi_options, index=0, horizontal=True)
-        mistrust_4 = st.radio("18. Professionals treat some people better than others. *", options=tohi_options, index=0, horizontal=True)
+        mistrust_1 = st.selectbox("15. You cannot trust doctors to tell the truth. *", options=tohi_options)
+        mistrust_2 = st.selectbox("16. Doctors care more about convenience than patient needs. *", options=tohi_options)
+        mistrust_3 = st.selectbox("17. Health professionals do not always keep information private. *", options=tohi_options)
+        mistrust_4 = st.selectbox("18. Professionals treat some people better than others. *", options=tohi_options)
 
         # ---------------------------------------
         # E. DISCRIMINATION
         # ---------------------------------------
         st.markdown("#### E. Experiences of Discrimination")
+        st.caption("How often do you experience the following?")
 
         freq_options = ["", "Never", "A few times a year", "A few times a month", "At least once a week", "Almost every day"]
 
-        discrim_1 = st.radio("19. Treated with less respect. *", options=freq_options, index=0, horizontal=True)
-        discrim_2 = st.radio("20. People assume you are dishonest. *", options=freq_options, index=0, horizontal=True)
-        discrim_3 = st.radio("21. People act superior. *", options=freq_options, index=0, horizontal=True)
-        discrim_4 = st.radio("22. Called names or insulted. *", options=freq_options, index=0, horizontal=True)
+        discrim_1 = st.selectbox("19. Treated with less respect. *", options=freq_options)
+        discrim_2 = st.selectbox("20. People assume you are dishonest. *", options=freq_options)
+        discrim_3 = st.selectbox("21. People act superior. *", options=freq_options)
+        discrim_4 = st.selectbox("22. Called names or insulted. *", options=freq_options)
 
         discrim_healthcare = st.radio("23. Experienced discrimination in healthcare? *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
