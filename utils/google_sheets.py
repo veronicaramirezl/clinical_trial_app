@@ -3,6 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import datetime
 
+# Define the scope
 SCOPE = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/spreadsheets",
@@ -11,30 +12,41 @@ SCOPE = [
 ]
 
 def get_sheet():
+    """
+    Authenticates using Streamlit Secrets (Production) or local JSON file (Development).
+    """
     try:
-        creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", SCOPE)
+        # 1. Try to load from Streamlit Secrets (for the deployed app)
+        if "gcp_service_account" in st.secrets:
+            # We convert the TOML data back into a dictionary format
+            creds_dict = dict(st.secrets["gcp_service_account"])
+            creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, SCOPE)
+        
+        # 2. Fallback to local file (for your local computer)
+        else:
+            creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", SCOPE)
+
         client = gspread.authorize(creds)
         # Opens the first sheet of the workbook
         return client.open("Clinical_Trial_Data").sheet1
+        
     except Exception as e:
         st.error(f"Connection Error: {e}")
         return None
 
+# --- EVERYTHING BELOW IS THE SAME AS YOUR CODE, KEPT FOR COMPLETENESS ---
+
 def load_participant_data(participant_id):
-    """
-    Fetches the user's progress from the sheet.
-    """
+    """Fetches the user's progress from the sheet."""
     sheet = get_sheet()
     if not sheet: return None
 
     try:
-        # UPDATED: find() now returns None if not found, it does not error.
         cell = sheet.find(participant_id)
         
         if cell:
             row_values = sheet.row_values(cell.row)
-            # Check if video (Col 11) is already assigned. 
-            # (Index 10 because python lists start at 0)
+            # Check if video (Col 11) is already assigned. (Index 10)
             video_url = row_values[10] if len(row_values) > 10 else None
             
             return {
@@ -47,7 +59,6 @@ def load_participant_data(participant_id):
             return {"found": False}
             
     except Exception as e:
-        # Catch other unforeseen errors
         st.error(f"Load Error: {e}")
         return {"found": False}
 
@@ -74,15 +85,13 @@ def save_demographics(user_data):
             "" # Column 10 (J) Video URL Placeholder
         ]
         
-        # UPDATED LOGIC: Check if cell exists first
         cell = sheet.find(p_id)
         
         if cell:
-            # If exists, update the demographics part (Columns A-I)
-            # Row number is cell.row
+            # Update existing row (cols A-I)
             sheet.update(range_name=f"A{cell.row}:I{cell.row}", values=[row_values[:-1]])
         else:
-            # If not found, append new row
+            # Append new row
             sheet.append_row(row_values)
             
         return True
@@ -98,7 +107,7 @@ def save_assigned_video(participant_id, video_url):
     try:
         cell = sheet.find(participant_id)
         if cell:
-            # Video is Column 11 (K). 
+            # Video is Column 11 (K)
             sheet.update_cell(cell.row, 11, video_url)
     except Exception as e:
         print(f"Video Save Error: {e}")
