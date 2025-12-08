@@ -81,18 +81,22 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
             "Doctoral or professional degree"
         ])
         insurance = st.radio("5. Do you have health insurance?", ["Yes", "No"])
-        insurance_type = st.radio(
-            "6. If yes, what type of health insurance do you have?",
-            [
-                "Private (Employer or Marketplace)",
-                "Medicare",
-                "Medicaid",
-                "Military / VA",
-                "Public (Other)",
-                "None",
-                "Prefer not to say"
-            ]
-        )
+
+        if insurance == "Yes":
+            insurance_type = st.radio(
+                "6. What type of health insurance do you have?",
+                [
+                    "Private (Employer or Marketplace)",
+                    "Medicare",
+                    "Medicaid",
+                    "Military / VA",
+                    "Public (Other)",
+                    "Prefer not to say"
+                ]
+            )
+        else:
+            insurance_type = "None"
+
 
 
         english = st.select_slider("7. English proficiency:", 
