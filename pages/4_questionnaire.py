@@ -23,21 +23,21 @@ options = [
 with st.form("likert_form"):
     
     # --- Likert Scale Questions ---
-    q1 = st.select_slider("1. I trust the information presented in this video. *", options=options)
+    q1 = st.radio("1. I trust the information presented in this video. *", options=options, index=0, horizontal=True)
     
-    q2 = st.select_slider("2. I feel confident in the accuracy of the information provided. *", options=options)
+    q2 = st.radio("2. I feel confident in the accuracy of the information provided. *", options=options, index=0, horizontal=True)
     
-    q3 = st.select_slider("3. The presenter appeared knowledgeable about the topic. *", options=options)
+    q3 = st.radio("3. The presenter appeared knowledgeable about the topic. *", options=options, index=0, horizontal=True)
     
-    q4 = st.select_slider("4. The information in this video would influence my treatment decisions. *", options=options)
+    q4 = st.radio("4. The information in this video would influence my treatment decisions. *", options=options, index=0, horizontal=True)
     
-    q5 = st.select_slider("5. I believe the presenter had my best interests in mind. *", options=options)
+    q5 = st.radio("5. I believe the presenter had my best interests in mind. *", options=options, index=0, horizontal=True)
     
-    q6 = st.select_slider("6. The presenter's communication style made the information easy to understand. *", options=options)
+    q6 = st.radio("6. The presenter's communication style made the information easy to understand. *", options=options, index=0, horizontal=True)
     
-    q7 = st.select_slider("7. The presenter's background made me more likely to trust the video's content. *", options=options)
+    q7 = st.radio("7. The presenter's background made me more likely to trust the video's content. *", options=options, index=0, horizontal=True)
     
-    q8 = st.select_slider("8. I would recommend this video to others seeking information on this topic. *", options=options)
+    q8 = st.radio("8. I would recommend this video to others seeking information on this topic. *", options=options, index=0, horizontal=True)
     
     st.divider()
     st.markdown("#### Additional Questions")

@@ -19,7 +19,6 @@ with col1:
 
     if st.session_state.get("new_user_flag"):
         st.session_state.new_user_flag = False
-        # now the participant ID exists and form appears
 
 
 # ---- RETURNING USER ----
@@ -31,7 +30,6 @@ with col2:
             result = load_participant_data(code)
 
             if result and result["found"]:
-                # Restore minimal required data
                 st.session_state.user_data = {"participant_id": code}
                 st.session_state.demographics_complete = True
 
@@ -39,10 +37,8 @@ with col2:
                     st.session_state.assigned_video = result["video_url"]
 
                 st.success("Session restored!")
-
                 st.session_state.go_to_video = True
                 st.rerun()
-
             else:
                 st.error("Code not found.")
 
@@ -69,7 +65,7 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         # ---------------------------------------
         st.markdown("#### A. Demographics")
 
-        age = st.number_input("1. What is your age? *", min_value=18, max_value=110, step=1, value=None)
+        age = st.number_input("1. What is your age? *", min_value=18, max_value=110, step=1, value=None, format="%d")
         sex = st.selectbox("2. What is your biological sex? *", ["", "Male", "Female", "Intersex", "Prefer not to say"])
         gender = st.selectbox("3. What is your gender identity? *", ["", "Man", "Woman", "Non-binary", "Prefer not to say"])
         edu = st.selectbox("4. Education level: *", [
@@ -102,8 +98,9 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         elif insurance == "No":
             insurance_type = "None"
 
-        english = st.select_slider("7. English proficiency: *", 
-                                   options=["", "Poor", "Fair", "Good", "Very good", "Fluent"])
+        english = st.radio("7. English proficiency: *", 
+                          ["", "Poor", "Fair", "Good", "Very good", "Fluent"],
+                          index=0)
 
         income = st.selectbox("8. Annual household income: *", [
             "",
@@ -121,8 +118,9 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         # ---------------------------------------
         st.markdown("#### B. Health & Healthcare Access")
 
-        health_status = st.select_slider("9. Overall health: *", 
-                                         options=["", "Poor", "Fair", "Good", "Very good", "Excellent"])
+        health_status = st.radio("9. Overall health: *", 
+                                 ["", "Poor", "Fair", "Good", "Very good", "Excellent"],
+                                 index=0)
 
         chronic = st.radio("10. Chronic conditions: *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
@@ -142,9 +140,9 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
 
         tohi_options = ["", "Strongly Disagree", "Disagree", "Agree", "Strongly Agree"]
 
-        trust_web_1 = st.select_slider("12. I trust the information I find online. *", options=tohi_options)
-        trust_web_2 = st.select_slider("13. I feel confident in online health accuracy. *", options=tohi_options)
-        trust_web_3 = st.select_slider("14. I would follow online medical advice. *", options=tohi_options)
+        trust_web_1 = st.radio("12. I trust the information I find online. *", options=tohi_options, index=0, horizontal=True)
+        trust_web_2 = st.radio("13. I feel confident in online health accuracy. *", options=tohi_options, index=0, horizontal=True)
+        trust_web_3 = st.radio("14. I would follow online medical advice. *", options=tohi_options, index=0, horizontal=True)
 
         # ---------------------------------------
         # D. MISTRUST
@@ -152,10 +150,10 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         st.markdown("#### D. Views on Healthcare")
         st.caption("Rate your agreement.")
 
-        mistrust_1 = st.select_slider("15. You cannot trust doctors to tell the truth. *", options=tohi_options)
-        mistrust_2 = st.select_slider("16. Doctors care more about convenience than patient needs. *", options=tohi_options)
-        mistrust_3 = st.select_slider("17. Health professionals do not always keep information private. *", options=tohi_options)
-        mistrust_4 = st.select_slider("18. Professionals treat some people better than others. *", options=tohi_options)
+        mistrust_1 = st.radio("15. You cannot trust doctors to tell the truth. *", options=tohi_options, index=0, horizontal=True)
+        mistrust_2 = st.radio("16. Doctors care more about convenience than patient needs. *", options=tohi_options, index=0, horizontal=True)
+        mistrust_3 = st.radio("17. Health professionals do not always keep information private. *", options=tohi_options, index=0, horizontal=True)
+        mistrust_4 = st.radio("18. Professionals treat some people better than others. *", options=tohi_options, index=0, horizontal=True)
 
         # ---------------------------------------
         # E. DISCRIMINATION
@@ -164,10 +162,10 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
 
         freq_options = ["", "Never", "A few times a year", "A few times a month", "At least once a week", "Almost every day"]
 
-        discrim_1 = st.select_slider("19. Treated with less respect. *", options=freq_options)
-        discrim_2 = st.select_slider("20. People assume you are dishonest. *", options=freq_options)
-        discrim_3 = st.select_slider("21. People act superior. *", options=freq_options)
-        discrim_4 = st.select_slider("22. Called names or insulted. *", options=freq_options)
+        discrim_1 = st.radio("19. Treated with less respect. *", options=freq_options, index=0, horizontal=True)
+        discrim_2 = st.radio("20. People assume you are dishonest. *", options=freq_options, index=0, horizontal=True)
+        discrim_3 = st.radio("21. People act superior. *", options=freq_options, index=0, horizontal=True)
+        discrim_4 = st.radio("22. Called names or insulted. *", options=freq_options, index=0, horizontal=True)
 
         discrim_healthcare = st.radio("23. Experienced discrimination in healthcare? *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
@@ -189,9 +187,9 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         Protein: 5 g
         """)
 
-        nutri_1 = st.number_input("24. Total calories if you eat the entire container: *", step=1, value=None)
-        nutri_2 = st.number_input("25. Cups allowed if limit is 60 g carbs: *", step=0.5, value=None)
-        nutri_3 = st.number_input("26. Total protein if eating the container: *", step=1, value=None)
+        nutri_1 = st.number_input("24. Total calories if you eat the entire container: *", step=1, value=None, format="%d")
+        nutri_2 = st.number_input("25. Cups allowed if limit is 60 g carbs: *", step=0.5, value=None, format="%.1f")
+        nutri_3 = st.number_input("26. Total protein if eating the container: *", step=1, value=None, format="%d")
 
         # ------------------------
         # SUBMIT
