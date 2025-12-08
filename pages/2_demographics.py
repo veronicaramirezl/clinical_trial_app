@@ -62,47 +62,51 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
 
     with st.form("demographics_form"):
         st.write("Please complete the following sections.")
+        st.caption("⚠️ All questions are required.")
         
         # ---------------------------------------
         # A. Demographics
         # ---------------------------------------
         st.markdown("#### A. Demographics")
 
-        age = st.number_input("1. What is your age?", min_value=18, max_value=110, step=1)
-        sex = st.selectbox("2. What is your biological sex?", ["Male", "Female", "Intersex", "Prefer not to say"])
-        gender = st.selectbox("3. What is your gender identity?", ["Man", "Woman", "Non-binary", "Prefer not to say"])
-        edu = st.selectbox("4. Education level:", [
+        age = st.number_input("1. What is your age? *", min_value=18, max_value=110, step=1, value=None)
+        sex = st.selectbox("2. What is your biological sex? *", ["", "Male", "Female", "Intersex", "Prefer not to say"])
+        gender = st.selectbox("3. What is your gender identity? *", ["", "Man", "Woman", "Non-binary", "Prefer not to say"])
+        edu = st.selectbox("4. Education level: *", [
+            "",
             "Less than high school",
             "High school diploma or GED",
             "Some college, no degree",
             "Associate degree",
-            "Bachelor’s degree",
-            "Master’s degree",
+            "Bachelor's degree",
+            "Master's degree",
             "Doctoral or professional degree"
         ])
-        insurance = st.radio("5. Do you have health insurance?", ["Yes", "No"])
+        insurance = st.radio("5. Do you have health insurance? *", ["", "Yes", "No"], index=0)
 
+        insurance_type = None
         if insurance == "Yes":
             insurance_type = st.radio(
-                "6. What type of health insurance do you have?",
+                "6. What type of health insurance do you have? *",
                 [
+                    "",
                     "Private (Employer or Marketplace)",
                     "Medicare",
                     "Medicaid",
                     "Military / VA",
                     "Public (Other)",
                     "Prefer not to say"
-                ]
+                ],
+                index=0
             )
-        else:
+        elif insurance == "No":
             insurance_type = "None"
 
+        english = st.select_slider("7. English proficiency: *", 
+                                   options=["", "Poor", "Fair", "Good", "Very good", "Fluent"])
 
-
-        english = st.select_slider("7. English proficiency:", 
-                                   options=["Poor", "Fair", "Good", "Very good", "Fluent"])
-
-        income = st.selectbox("8. Annual household income:", [
+        income = st.selectbox("8. Annual household income: *", [
+            "",
             "Less than $25,000",
             "$25,000 - $49,999",
             "$50,000 - $74,999",
@@ -117,12 +121,13 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         # ---------------------------------------
         st.markdown("#### B. Health & Healthcare Access")
 
-        health_status = st.select_slider("9. Overall health:", 
-                                         options=["Poor", "Fair", "Good", "Very good", "Excellent"])
+        health_status = st.select_slider("9. Overall health: *", 
+                                         options=["", "Poor", "Fair", "Good", "Very good", "Excellent"])
 
-        chronic = st.radio("10. Chronic conditions:", ["Yes", "No", "Prefer not to say"])
+        chronic = st.radio("10. Chronic conditions: *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
-        visit_freq = st.selectbox("11. Healthcare visits:", [
+        visit_freq = st.selectbox("11. Healthcare visits: *", [
+            "",
             "Rarely or never",
             "Once or twice a year",
             "Once every few months",
@@ -135,11 +140,11 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         st.markdown("#### C. Trust in Online Health Information")
         st.caption("Rate your agreement.")
 
-        tohi_options = ["Strongly Disagree", "Disagree", "Agree", "Strongly Agree"]
+        tohi_options = ["", "Strongly Disagree", "Disagree", "Agree", "Strongly Agree"]
 
-        trust_web_1 = st.select_slider("12. I trust the information I find online.", options=tohi_options)
-        trust_web_2 = st.select_slider("13. I feel confident in online health accuracy.", options=tohi_options)
-        trust_web_3 = st.select_slider("14. I would follow online medical advice.", options=tohi_options)
+        trust_web_1 = st.select_slider("12. I trust the information I find online. *", options=tohi_options)
+        trust_web_2 = st.select_slider("13. I feel confident in online health accuracy. *", options=tohi_options)
+        trust_web_3 = st.select_slider("14. I would follow online medical advice. *", options=tohi_options)
 
         # ---------------------------------------
         # D. MISTRUST
@@ -147,24 +152,24 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         st.markdown("#### D. Views on Healthcare")
         st.caption("Rate your agreement.")
 
-        mistrust_1 = st.select_slider("15. You cannot trust doctors to tell the truth.", options=tohi_options)
-        mistrust_2 = st.select_slider("16. Doctors care more about convenience than patient needs.", options=tohi_options)
-        mistrust_3 = st.select_slider("17. Health professionals do not always keep information private.", options=tohi_options)
-        mistrust_4 = st.select_slider("18. Professionals treat some people better than others.", options=tohi_options)
+        mistrust_1 = st.select_slider("15. You cannot trust doctors to tell the truth. *", options=tohi_options)
+        mistrust_2 = st.select_slider("16. Doctors care more about convenience than patient needs. *", options=tohi_options)
+        mistrust_3 = st.select_slider("17. Health professionals do not always keep information private. *", options=tohi_options)
+        mistrust_4 = st.select_slider("18. Professionals treat some people better than others. *", options=tohi_options)
 
         # ---------------------------------------
         # E. DISCRIMINATION
         # ---------------------------------------
         st.markdown("#### E. Experiences of Discrimination")
 
-        freq_options = ["Never", "A few times a year", "A few times a month", "At least once a week", "Almost every day"]
+        freq_options = ["", "Never", "A few times a year", "A few times a month", "At least once a week", "Almost every day"]
 
-        discrim_1 = st.select_slider("19. Treated with less respect.", options=freq_options)
-        discrim_2 = st.select_slider("20. People assume you are dishonest.", options=freq_options)
-        discrim_3 = st.select_slider("21. People act superior.", options=freq_options)
-        discrim_4 = st.select_slider("22. Called names or insulted.", options=freq_options)
+        discrim_1 = st.select_slider("19. Treated with less respect. *", options=freq_options)
+        discrim_2 = st.select_slider("20. People assume you are dishonest. *", options=freq_options)
+        discrim_3 = st.select_slider("21. People act superior. *", options=freq_options)
+        discrim_4 = st.select_slider("22. Called names or insulted. *", options=freq_options)
 
-        discrim_healthcare = st.radio("23. Experienced discrimination in healthcare?", ["Yes", "No", "Prefer not to say"])
+        discrim_healthcare = st.radio("23. Experienced discrimination in healthcare? *", ["", "Yes", "No", "Prefer not to say"], index=0)
 
         # ---------------------------------------
         # F. NUTRITION LITERACY
@@ -184,9 +189,9 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         Protein: 5 g
         """)
 
-        nutri_1 = st.number_input("24. Total calories if you eat the entire container:", step=1)
-        nutri_2 = st.number_input("25. Cups allowed if limit is 60 g carbs:", step=0.5)
-        nutri_3 = st.number_input("26. Total protein if eating the container:", step=1)
+        nutri_1 = st.number_input("24. Total calories if you eat the entire container: *", step=1, value=None)
+        nutri_2 = st.number_input("25. Cups allowed if limit is 60 g carbs: *", step=0.5, value=None)
+        nutri_3 = st.number_input("26. Total protein if eating the container: *", step=1, value=None)
 
         # ------------------------
         # SUBMIT
@@ -194,41 +199,100 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
         submit = st.form_submit_button("Submit and Continue")
 
         if submit:
-            st.session_state.user_data.update({
-                "participant_id": p_id,
-                "age": age,
-                "sex": sex,
-                "gender_identity": gender,
-                "education": edu,
-                "insurance": insurance,
-                "insurance_type": insurance_type,
-                "english_proficiency": english,
-                "income": income,
-                "health_status": health_status,
-                "chronic_conditions": chronic,
-                "visit_frequency": visit_freq,
-                "trust_web_1": trust_web_1,
-                "trust_web_2": trust_web_2,
-                "trust_web_3": trust_web_3,
-                "mistrust_1": mistrust_1,
-                "mistrust_2": mistrust_2,
-                "mistrust_3": mistrust_3,
-                "mistrust_4": mistrust_4,
-                "discrim_1": discrim_1,
-                "discrim_2": discrim_2,
-                "discrim_3": discrim_3,
-                "discrim_4": discrim_4,
-                "discrim_healthcare": discrim_healthcare,
-                "nutri_calories": nutri_1,
-                "nutri_carbs": nutri_2,
-                "nutri_protein": nutri_3
-            })
+            # Validation
+            errors = []
+            
+            if age is None:
+                errors.append("Age")
+            if not sex or sex == "":
+                errors.append("Biological sex")
+            if not gender or gender == "":
+                errors.append("Gender identity")
+            if not edu or edu == "":
+                errors.append("Education level")
+            if not insurance or insurance == "":
+                errors.append("Health insurance")
+            if insurance == "Yes" and (not insurance_type or insurance_type == ""):
+                errors.append("Insurance type")
+            if not english or english == "":
+                errors.append("English proficiency")
+            if not income or income == "":
+                errors.append("Income")
+            if not health_status or health_status == "":
+                errors.append("Overall health")
+            if not chronic or chronic == "":
+                errors.append("Chronic conditions")
+            if not visit_freq or visit_freq == "":
+                errors.append("Healthcare visits")
+            if not trust_web_1 or trust_web_1 == "":
+                errors.append("Question 12")
+            if not trust_web_2 or trust_web_2 == "":
+                errors.append("Question 13")
+            if not trust_web_3 or trust_web_3 == "":
+                errors.append("Question 14")
+            if not mistrust_1 or mistrust_1 == "":
+                errors.append("Question 15")
+            if not mistrust_2 or mistrust_2 == "":
+                errors.append("Question 16")
+            if not mistrust_3 or mistrust_3 == "":
+                errors.append("Question 17")
+            if not mistrust_4 or mistrust_4 == "":
+                errors.append("Question 18")
+            if not discrim_1 or discrim_1 == "":
+                errors.append("Question 19")
+            if not discrim_2 or discrim_2 == "":
+                errors.append("Question 20")
+            if not discrim_3 or discrim_3 == "":
+                errors.append("Question 21")
+            if not discrim_4 or discrim_4 == "":
+                errors.append("Question 22")
+            if not discrim_healthcare or discrim_healthcare == "":
+                errors.append("Question 23")
+            if nutri_1 is None:
+                errors.append("Question 24")
+            if nutri_2 is None:
+                errors.append("Question 25")
+            if nutri_3 is None:
+                errors.append("Question 26")
 
-            with st.spinner("Saving progress..."):
-                saved = save_demographics(st.session_state.user_data)
-
-            if saved:
-                st.session_state.demographics_complete = True
-                st.switch_page("pages/3_video_randomizer.py")
+            if errors:
+                st.error(f"⚠️ Please answer all required questions. Missing: {', '.join(errors)}")
             else:
-                st.error("Connection error. Please try again.")
+                st.session_state.user_data.update({
+                    "participant_id": p_id,
+                    "age": age,
+                    "sex": sex,
+                    "gender_identity": gender,
+                    "education": edu,
+                    "insurance": insurance,
+                    "insurance_type": insurance_type,
+                    "english_proficiency": english,
+                    "income": income,
+                    "health_status": health_status,
+                    "chronic_conditions": chronic,
+                    "visit_frequency": visit_freq,
+                    "trust_web_1": trust_web_1,
+                    "trust_web_2": trust_web_2,
+                    "trust_web_3": trust_web_3,
+                    "mistrust_1": mistrust_1,
+                    "mistrust_2": mistrust_2,
+                    "mistrust_3": mistrust_3,
+                    "mistrust_4": mistrust_4,
+                    "discrim_1": discrim_1,
+                    "discrim_2": discrim_2,
+                    "discrim_3": discrim_3,
+                    "discrim_4": discrim_4,
+                    "discrim_healthcare": discrim_healthcare,
+                    "nutri_calories": nutri_1,
+                    "nutri_carbs": nutri_2,
+                    "nutri_protein": nutri_3
+                })
+
+                with st.spinner("Saving progress..."):
+                    saved = save_demographics(st.session_state.user_data)
+
+                if saved:
+                    st.session_state.demographics_complete = True
+                    st.switch_page("pages/3_video_randomizer.py")
+                else:
+                    st.error("Connection error. Please try again.")
