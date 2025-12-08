@@ -82,7 +82,7 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
 
         insurance_type = None
         if insurance == "Yes":
-            insurance_type = st.radio(
+            insurance_type = st.selectbox(
                 "6. What type of health insurance do you have? *",
                 [
                     "",
@@ -92,8 +92,7 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
                     "Military / VA",
                     "Public (Other)",
                     "Prefer not to say"
-                ],
-                index=0
+                ]
             )
         elif insurance == "No":
             insurance_type = "None"
