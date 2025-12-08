@@ -81,45 +81,50 @@ def save_demographics(user_data):
             return "" if v is None else str(v)
 
         row_values = [
-            clean(timestamp),                 # A
-            clean(p_id),                      # B
-            clean(user_data.get("age")),      # C
-            clean(user_data.get("sex")),      # D
-            clean(user_data.get("gender_identity")),  # E
-            clean(user_data.get("education")),         # F
-            clean(user_data.get("insurance")),         # G
-            clean(user_data.get("insurance_type")),    # H
-            clean(user_data.get("english_proficiency")), # I
-            clean(user_data.get("income")),              # J
-            clean(user_data.get("health_status")),       # K
-            clean(user_data.get("chronic_conditions")),  # L
-            clean(user_data.get("visit_frequency")),     # M
-            clean(user_data.get("trust_web_1")),         # N
-            clean(user_data.get("trust_web_2")),         # O
-            clean(user_data.get("trust_web_3")),         # P
-            clean(user_data.get("mistrust_1")),          # Q
-            clean(user_data.get("mistrust_2")),          # R
-            clean(user_data.get("mistrust_3")),          # S
-            clean(user_data.get("mistrust_4")),          # T
-            clean(user_data.get("discrim_1")),           # U
-            clean(user_data.get("discrim_2")),           # V
-            clean(user_data.get("discrim_3")),           # W
-            clean(user_data.get("discrim_4")),           # X
-            clean(user_data.get("discrim_healthcare")),  # Y
-            clean(user_data.get("nutri_calories")),      # Z
-            clean(user_data.get("nutri_carbs")),         # AA
-            clean(user_data.get("nutri_protein")),       # AB
-            ""                                           # AC video placeholder
+            clean(timestamp),                 # A (col 1)
+            clean(p_id),                      # B (col 2)
+            clean(user_data.get("age")),      # C (col 3)
+            clean(user_data.get("sex")),      # D (col 4)
+            clean(user_data.get("gender_identity")),  # E (col 5)
+            clean(user_data.get("education")),         # F (col 6)
+            clean(user_data.get("insurance")),         # G (col 7)
+            clean(user_data.get("insurance_type")),    # H (col 8)
+            clean(user_data.get("english_proficiency")), # I (col 9)
+            clean(user_data.get("income")),              # J (col 10)
+            clean(user_data.get("health_status")),       # K (col 11)
+            clean(user_data.get("chronic_conditions")),  # L (col 12)
+            clean(user_data.get("visit_frequency")),     # M (col 13)
+            clean(user_data.get("trust_web_1")),         # N (col 14)
+            clean(user_data.get("trust_web_2")),         # O (col 15)
+            clean(user_data.get("trust_web_3")),         # P (col 16)
+            clean(user_data.get("mistrust_1")),          # Q (col 17)
+            clean(user_data.get("mistrust_2")),          # R (col 18)
+            clean(user_data.get("mistrust_3")),          # S (col 19)
+            clean(user_data.get("mistrust_4")),          # T (col 20)
+            clean(user_data.get("discrim_1")),           # U (col 21)
+            clean(user_data.get("discrim_2")),           # V (col 22)
+            clean(user_data.get("discrim_3")),           # W (col 23)
+            clean(user_data.get("discrim_4")),           # X (col 24)
+            clean(user_data.get("discrim_healthcare")),  # Y (col 25)
+            clean(user_data.get("nutri_calories")),      # Z (col 26)
+            clean(user_data.get("nutri_carbs")),         # AA (col 27)
+            clean(user_data.get("nutri_protein")),       # AB (col 28)
+            ""                                           # AC (col 29) video placeholder
         ]
 
-        # Lookup row
-        cell = sheet.find(p_id)
+        # Lookup row - search in column B only for efficiency
+        try:
+            cell = sheet.find(p_id, in_column=2)
+        except:
+            cell = None
 
         if cell:
-            # Update EXACT correct range (A to AC)
-            sheet.update(f"A{cell.row}:AC{cell.row}", [row_values])
+            # Update existing row - use proper range notation
+            range_notation = f"A{cell.row}:AC{cell.row}"
+            sheet.update(range_notation, [row_values], value_input_option='RAW')
         else:
-            sheet.append_row(row_values)
+            # Append new row
+            sheet.append_row(row_values, value_input_option='RAW')
 
         return True
 
@@ -137,7 +142,7 @@ def save_assigned_video(participant_id, video_url):
         return
 
     try:
-        cell = sheet.find(participant_id)
+        cell = sheet.find(participant_id, in_column=2)
         if cell:
             sheet.update_cell(cell.row, 29, video_url)
 
@@ -154,7 +159,7 @@ def save_final_survey(participant_id, survey_data):
         return False
 
     try:
-        cell = sheet.find(participant_id)
+        cell = sheet.find(participant_id, in_column=2)
 
         if cell:
             values = [
@@ -170,13 +175,15 @@ def save_final_survey(participant_id, survey_data):
                 survey_data.get("Competence", "")
             ]
 
+            # AD is column 30, AM is column 39
             start_col = 30   # AD
             end_col = start_col + len(values) - 1  # AM
 
             start_a1 = gspread.utils.rowcol_to_a1(cell.row, start_col)
             end_a1 = gspread.utils.rowcol_to_a1(cell.row, end_col)
 
-            sheet.update(f"{start_a1}:{end_a1}", [values])
+            range_notation = f"{start_a1}:{end_a1}"
+            sheet.update(range_notation, [values], value_input_option='RAW')
             return True
 
         else:
