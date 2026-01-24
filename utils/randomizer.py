@@ -4,14 +4,14 @@ import uuid
 
 # 8 Private YouTube Videos (Placeholders)
 VIDEO_LIST = [
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "https://www.youtube.com/watch?v=E8gmARGvPlI",
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "https://www.youtube.com/watch?v=eDwi-8n054s",
-    "https://www.youtube.com/watch?v=kBYHwH1Vb-c",
-    "https://www.youtube.com/watch?v=dLl4PZtxia8",
-    "https://www.youtube.com/watch?v=f_X5A-BYjO8",
-    "https://www.youtube.com/watch?v=LXIWRan3XGY",
+    "https://youtu.be/1_FI9K4kI6Y",
+    "https://youtu.be/0qsSkuKcpSc",
+    "https://youtu.be/r-Lb4GMRJqE",
+    "https://youtu.be/d91zMMHgNs0",
+    "https://youtu.be/HxI5QC9HzdU",
+    "https://youtu.be/zgecejuWgZ8",
+    "https://youtu.be/BvTEQL3VKvo"
+    
 ]
 
 def generate_participant_id():
