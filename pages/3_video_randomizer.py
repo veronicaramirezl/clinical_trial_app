@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.randomizer import get_random_video
+from utils.randomizer import get_random_video, normalize_youtube_url
 from utils.google_sheets import save_assigned_video
 
 # Security Check
@@ -21,7 +21,8 @@ if st.session_state.get('assigned_video') is None:
     save_assigned_video(p_id, new_video)
 
 # Display Video
-video_url = st.session_state['assigned_video']
+raw_url = st.session_state['assigned_video']
+video_url = normalize_youtube_url(st.session_state['assigned_video'])
 
 st.info("Please watch the video below in its entirety.")
 st.video(video_url)

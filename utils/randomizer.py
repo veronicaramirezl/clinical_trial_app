@@ -36,3 +36,9 @@ def initialize_session_state():
         st.session_state['demographics_complete'] = False
     if 'assigned_video' not in st.session_state:
         st.session_state['assigned_video'] = None
+        
+def normalize_youtube_url(url):
+    if "youtu.be/" in url:
+        video_id = url.split("youtu.be/")[-1]
+        return f"https://www.youtube.com/watch?v={video_id}"
+    return url
