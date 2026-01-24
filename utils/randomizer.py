@@ -3,6 +3,8 @@ import streamlit as st
 import uuid
 
 # 8 Private YouTube Videos (Placeholders)
+
+
 VIDEO_LIST = [
     "https://youtu.be/1_FI9K4kI6Y",
     "https://youtu.be/0qsSkuKcpSc",
@@ -11,8 +13,13 @@ VIDEO_LIST = [
     "https://youtu.be/HxI5QC9HzdU",
     "https://youtu.be/zgecejuWgZ8",
     "https://youtu.be/BvTEQL3VKvo"
-    
 ]
+
+st.title("Videos")
+
+for url in VIDEO_LIST:
+    st.video(url)
+
 
 def generate_participant_id():
     """Generates a unique short ID for the user."""
