@@ -6,13 +6,13 @@ import uuid
 
 
 VIDEO_LIST = [
-    "https://youtu.be/1_FI9K4kI6Y",
-    "https://youtu.be/0qsSkuKcpSc",
-    "https://youtu.be/r-Lb4GMRJqE",
-    "https://youtu.be/d91zMMHgNs0",
-    "https://youtu.be/HxI5QC9HzdU",
-    "https://youtu.be/zgecejuWgZ8",
-    "https://youtu.be/BvTEQL3VKvo"
+    "https://www.youtube.com/watch?v=r-Lb4GMRJqE",
+    "https://www.youtube.com/watch?v=0qsSkuKcpSc",
+    "https://www.youtube.com/watch?v=r-Lb4GMRJqE",
+    "https://www.youtube.com/watch?v=d91zMMHgNs0",
+    "https://www.youtube.com/watch?v=HxI5QC9HzdU",
+    "https://www.youtube.com/watch?v=zgecejuWgZ8",
+    "https://www.youtube.com/watch?v=BvTEQL3VKvo"
 ]
 
 st.title("Videos")
