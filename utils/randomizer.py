@@ -1,44 +1,39 @@
 import random
-import streamlit as st
 import uuid
+from pathlib import Path
+import streamlit as st
 
-# 8 Private YouTube Videos (Placeholders)
-
+# -------------------------
+# VIDEO PATHS (LOCAL MP4s)
+# -------------------------
+VIDEO_DIR = Path("assets/videos")
 
 VIDEO_LIST = [
-    "https://www.youtube.com/watch?v=r-Lb4GMRJqE",
-    "https://www.youtube.com/watch?v=0qsSkuKcpSc",
-    "https://www.youtube.com/watch?v=r-Lb4GMRJqE",
-    "https://www.youtube.com/watch?v=d91zMMHgNs0",
-    "https://www.youtube.com/watch?v=HxI5QC9HzdU",
-    "https://www.youtube.com/watch?v=zgecejuWgZ8",
-    "https://www.youtube.com/watch?v=BvTEQL3VKvo"
+    str(VIDEO_DIR / "Black Female LBP-CT.mp4"),
+    str(VIDEO_DIR / "Black Female LBP-S.mp4"),
+    str(VIDEO_DIR / "Black Male LBP-CT.mp4"),
+    str(VIDEO_DIR / "Black Male LBP-S.mp4"),
+    str(VIDEO_DIR / "White Female LBP-CT.mp4"),
+    str(VIDEO_DIR / "White Female LBP-SV1.mp4"),
+    str(VIDEO_DIR / "White Male LBP-CT.mp4"),
+    str(VIDEO_DIR / "White Male LBP-S.mp4"),
 ]
 
-st.title("Videos")
-
-for url in VIDEO_LIST:
-    st.video(url)
-
-
+# -------------------------
+# FUNCTIONS
+# -------------------------
 def generate_participant_id():
-    """Generates a unique short ID for the user."""
     return str(uuid.uuid4())[:8].upper()
 
 def get_random_video():
-    """Selects a random video."""
     return random.choice(VIDEO_LIST)
 
 def initialize_session_state():
-    if 'user_data' not in st.session_state:
-        st.session_state['user_data'] = {}
-    if 'demographics_complete' not in st.session_state:
-        st.session_state['demographics_complete'] = False
-    if 'assigned_video' not in st.session_state:
-        st.session_state['assigned_video'] = None
-        
-def normalize_youtube_url(url):
-    if "youtu.be/" in url:
-        video_id = url.split("youtu.be/")[-1]
-        return f"https://www.youtube.com/watch?v={video_id}"
-    return url
+    if "user_data" not in st.session_state:
+        st.session_state["user_data"] = {
+            "participant_id": generate_participant_id()
+        }
+    if "demographics_complete" not in st.session_state:
+        st.session_state["demographics_complete"] = False
+    if "assigned_video" not in st.session_state:
+        st.session_state["assigned_video"] = None

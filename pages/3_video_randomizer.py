@@ -1,31 +1,43 @@
 import streamlit as st
-from utils.randomizer import get_random_video, normalize_youtube_url
+from utils.randomizer import (
+    get_random_video,
+    initialize_session_state
+)
 from utils.google_sheets import save_assigned_video
 
-# Security Check
-if not st.session_state.get('demographics_complete'):
+# -------------------------
+# SESSION INIT
+# -------------------------
+initialize_session_state()
+
+# -------------------------
+# SECURITY CHECK
+# -------------------------
+if not st.session_state["demographics_complete"]:
     st.switch_page("pages/2_demographics.py")
 
-st.markdown("""<style>[data-testid="stSidebar"] {display: none;}</style>""", unsafe_allow_html=True)
+st.markdown(
+    "<style>[data-testid='stSidebar'] {display: none;}</style>",
+    unsafe_allow_html=True
+)
+
 st.title("Video Session")
 
-# --- ASSIGNMENT LOGIC ---
-# If no video assigned yet, pick one AND SAVE IT immediately
-if st.session_state.get('assigned_video') is None:
-    # 1. Pick Video
+# -------------------------
+# ASSIGN VIDEO ONCE
+# -------------------------
+if st.session_state["assigned_video"] is None:
     new_video = get_random_video()
-    st.session_state['assigned_video'] = new_video
-    
-    # 2. Save to Google Sheets immediately (Persist changes)
-    p_id = st.session_state['user_data']['participant_id']
+    st.session_state["assigned_video"] = new_video
+
+    p_id = st.session_state["user_data"]["participant_id"]
     save_assigned_video(p_id, new_video)
 
-# Display Video
-raw_url = st.session_state['assigned_video']
-video_url = normalize_youtube_url(st.session_state['assigned_video'])
-
+# -------------------------
+# DISPLAY VIDEO
+# -------------------------
 st.info("Please watch the video below in its entirety.")
-st.video(video_url)
+st.video(st.session_state["assigned_video"])
 
 st.write("---")
 st.write("Click 'Next' only when you have finished watching.")
