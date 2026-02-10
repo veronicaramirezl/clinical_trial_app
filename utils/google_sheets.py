@@ -230,17 +230,20 @@ def save_final_survey(participant_id, survey_data):
     - AM: Likert_8 (index 38)
     - AN: Trust_Level (index 39)
     - AO: Competence (index 40)
+    - AP: Perceived_Gender (index 41)
+    - AQ: Perceived_Race_Ethnicity (index 42)
+    - AR: Perceived_AI_Generated (index 43)
     """
     sheet = get_sheet()
     if not sheet:
         return False
 
     try:
-        cell = sheet.find(participant_id, in_column=2)  # Column B
+            # Clean survey data
 
         if cell:
             # Clean survey data
-            def clean(v):
+            # Build data for columns AF to AR
                 return "" if v is None else str(v)
 
             values = [
@@ -251,10 +254,13 @@ def save_final_survey(participant_id, survey_data):
                 clean(survey_data.get("Likert_5")),      # AJ
                 clean(survey_data.get("Likert_6")),      # AK
                 clean(survey_data.get("Likert_7")),      # AL
-                clean(survey_data.get("Likert_8")),      # AM
+                clean(survey_data.get("Competence")),
+                clean(survey_data.get("Perceived_Gender")),
+                clean(survey_data.get("Perceived_Race_Ethnicity")),
+                clean(survey_data.get("Perceived_AI_Generated"))
                 clean(survey_data.get("Trust_Level")),   # AN
                 clean(survey_data.get("Competence"))     # AO
-            ]
+            range_notation = f"AF{cell.row}:AR{cell.row}"
 
             # AF is column 32 (index 31), AO is column 41 (index 40)
             range_notation = f"AF{cell.row}:AO{cell.row}"
