@@ -54,6 +54,34 @@ with st.form("likert_form"):
         ["", "Yes", "No"],
         index=0
     )
+
+    st.divider()
+    st.markdown("#### Perceptions of the Presenter")
+
+    q11 = st.selectbox(
+        "11. What gender did the presenter seem to be? *",
+        ["", "Man", "Woman", "Non-binary", "Prefer not to say", "Not sure"],
+    )
+
+    q12 = st.selectbox(
+        "12. What race/ethnicity did the presenter seem to be? *",
+        [
+            "",
+            "White",
+            "Black or African American",
+            "Hispanic or Latino",
+            "Asian",
+            "Other",
+            "Not sure",
+            "Prefer not to say",
+        ],
+    )
+
+    q13 = st.radio(
+        "13. Did the presenter seem AI-generated? *",
+        ["", "Yes", "No", "Not sure"],
+        index=0,
+    )
     
     submitted = st.form_submit_button("Finish Study")
     
@@ -81,6 +109,12 @@ with st.form("likert_form"):
             errors.append("Question 9")
         if not q10 or q10 == "":
             errors.append("Question 10")
+        if not q11 or q11 == "":
+            errors.append("Question 11")
+        if not q12 or q12 == "":
+            errors.append("Question 12")
+        if not q13 or q13 == "":
+            errors.append("Question 13")
         
         if errors:
             st.error(f"⚠️ Please answer all required questions. Missing: {', '.join(errors)}")
@@ -96,7 +130,10 @@ with st.form("likert_form"):
                 "Likert_7": q7,
                 "Likert_8": q8,
                 "Trust_Level": q9,
-                "Competence": q10
+                "Competence": q10,
+                "Perceived_Gender": q11,
+                "Perceived_Race_Ethnicity": q12,
+                "Perceived_AI_Generated": q13
             }
             
             p_id = st.session_state['user_data'].get('participant_id', 'Unknown')
