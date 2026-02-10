@@ -9,9 +9,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Patient Education Research Study")
-st.subheader("Department of Neurosurgery")
-
 # Centered Logo
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
