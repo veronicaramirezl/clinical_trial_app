@@ -2,8 +2,7 @@ import streamlit as st
 from utils.randomizer import (
     initialize_session_state,
     get_stratum,
-    assign_balanced_video,
-    VIDEO_LIST
+    assign_balanced_video
 )
 from utils.google_sheets import save_assigned_video, get_video_counts_for_stratum
 
