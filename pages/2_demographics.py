@@ -30,7 +30,37 @@ with col2:
             result = load_participant_data(code)
 
             if result and result["found"]:
-                st.session_state.user_data = {"participant_id": code}
+                row = result.get("data", [])
+                st.session_state.user_data = {
+                    "participant_id": code,
+                    "age": row[2] if len(row) > 2 else None,
+                    "sex": row[3] if len(row) > 3 else None,
+                    "gender_identity": row[4] if len(row) > 4 else None,
+                    "race": row[5] if len(row) > 5 else None,
+                    "education": row[6] if len(row) > 6 else None,
+                    "insurance": row[7] if len(row) > 7 else None,
+                    "insurance_type": row[8] if len(row) > 8 else None,
+                    "english_proficiency": row[9] if len(row) > 9 else None,
+                    "income": row[10] if len(row) > 10 else None,
+                    "health_status": row[11] if len(row) > 11 else None,
+                    "chronic_conditions": row[12] if len(row) > 12 else None,
+                    "visit_frequency": row[13] if len(row) > 13 else None,
+                    "trust_web_1": row[14] if len(row) > 14 else None,
+                    "trust_web_2": row[15] if len(row) > 15 else None,
+                    "trust_web_3": row[16] if len(row) > 16 else None,
+                    "mistrust_1": row[17] if len(row) > 17 else None,
+                    "mistrust_2": row[18] if len(row) > 18 else None,
+                    "mistrust_3": row[19] if len(row) > 19 else None,
+                    "mistrust_4": row[20] if len(row) > 20 else None,
+                    "discrim_1": row[21] if len(row) > 21 else None,
+                    "discrim_2": row[22] if len(row) > 22 else None,
+                    "discrim_3": row[23] if len(row) > 23 else None,
+                    "discrim_4": row[24] if len(row) > 24 else None,
+                    "discrim_healthcare": row[25] if len(row) > 25 else None,
+                    "nutri_calories": row[26] if len(row) > 26 else None,
+                    "nutri_carbs": row[27] if len(row) > 27 else None,
+                    "nutri_protein": row[28] if len(row) > 28 else None,
+                }
                 st.session_state.demographics_complete = True
 
                 if result.get("video_url"):
@@ -208,6 +238,8 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
                 errors.append("Age")
             if not sex or sex == "":
                 errors.append("Biological sex")
+            if not race or race == "":
+                errors.append("Race/ethnicity")
             if not gender or gender == "":
                 errors.append("Gender identity")
             if not edu or edu == "":
@@ -265,6 +297,7 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
                     "age": age,
                     "sex": sex,
                     "gender_identity": gender,
+                    "race": race,
                     "education": edu,
                     "insurance": insurance,
                     "insurance_type": insurance_type,

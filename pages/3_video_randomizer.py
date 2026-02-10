@@ -29,8 +29,13 @@ st.title("Video Session")
 # -------------------------
 if st.session_state["assigned_video"] is None:
     # Get participant demographics
-    gender = st.session_state["user_data"]["gender_identity"]
-    race = st.session_state["user_data"]["race"]
+    user_data = st.session_state.get("user_data", {})
+    gender = user_data.get("gender_identity")
+    race = user_data.get("race")
+
+    if not gender or not race:
+        st.error("Missing demographic data. Please complete the demographics form.")
+        st.switch_page("pages/2_demographics.py")
     
     # Determine stratum
     stratum = get_stratum(gender, race)
@@ -43,7 +48,7 @@ if st.session_state["assigned_video"] is None:
     
     # Save to session and database
     st.session_state["assigned_video"] = new_video
-    p_id = st.session_state["user_data"]["participant_id"]
+    p_id = user_data.get("participant_id")
     save_assigned_video(p_id, new_video, stratum)
 
 # -------------------------
