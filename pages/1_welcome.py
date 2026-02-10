@@ -24,59 +24,47 @@ with col2:
 st.markdown("""
 ### Welcome
 
-Thank you for your interest in this research study. We are examining how patients understand and interpret medical information when it is presented by different types of physicians in online educational videos. Your participation will help us improve the clarity, trustworthiness, and effectiveness of neurosurgical patient education materials.
+Thank you for your interest in this research study. This study examines how people understand and evaluate medical information presented in online educational videos related to spine care. Your participation will help improve how educational health information is developed and communicated to patients.
 
 ### What You Will Do
 
-Participation takes approximately **10 to 15 minutes**. The study has three parts:
+Participation takes approximately **10 to 15 minutes** and includes three parts:
 
-1. **Short Background Survey** You will answer questions about demographics, health history, and your general trust in online medical information.
+1. **Background Survey** You will answer brief questions about your demographics, health background, and general use of online medical information.
 
-2. **Educational Video** You will watch a brief video explaining a neurosurgical topic.
+2. **Educational Video** You will watch a short educational video explaining a topic related to treatment options or clinical trials for back pain.
 
-3. **Post-Video Survey** You will complete a second questionnaire assessing your impression of the presenter, your trust in the information, and how the video influenced your understanding.
+3. **Post-Video Survey** You will complete a questionnaire about your impressions of the video, the presenter, and the information provided. 
 
-Both surveys are based on validated research instruments and have been shortened for clarity and ease of completion.
+The survey questions are adapted from established research instruments and have been shortened to reduce burden.
 
-### Privacy and Confidentiality
+### About the Video Content 
 
-* **Anonymous participation** We will not collect your name, contact information, or any personally identifying details.
+The educational video features a digitally generated clinician delivering standardized medical information. All videos use the same script and content. Minor visual artifacts may be present. The video is for research and educational purposes only and does not provide personal medical advice.
 
-* **Secure data storage** Your responses are stored in a secure system and used only for academic research.
+### Privacy and Voluntary Participation
 
-* **Voluntary participation** You may stop at any time without penalty or explanation.
+* **Anonymous participation** No names, contact information, or direct identifiers are collected.
+
+* **Confidentiality** Responses are stored securely and used only for research purposes.
+
+* **Voluntary participation** Your participation is voluntary, and you may stop at any time without penalty.
 """)
 
 st.divider()
 
-# --- SECURITY SECTION ---
-st.subheader("Study Access")
+# --- CONSENT SECTION ---
+st.markdown("""
+### Consent to Participate
 
-# CHANGE PASSWORD HERE IF NEEDED
-SECRET_PASSWORD = "NEURO2025"
+By clicking the button below, you confirm that:
 
-access_code = st.text_input("Please enter the Access Code to begin:", type="password")
+* You are **18 years of age or older**
+* You have read and understood the information above
+* You voluntarily agree to participate in this study
+""")
 
-if access_code == SECRET_PASSWORD:
-    st.success("Access Granted.")
-    
-    # --- CONSENT SECTION (Only visible after password) ---
-    st.markdown("""
-    ### Consent to Participate
-
-    By clicking the button below, you confirm that:
-
-    * You are **18 years of age or older**
-    * You have read and understood the information above
-    * You voluntarily agree to participate in this study
-    """)
-
-    colA, colB, colC = st.columns([1, 2, 1])
-    with colB:
-        if st.button("I Agree and Begin", type="primary", use_container_width=True):
-            st.switch_page("pages/2_demographics.py")
-
-elif access_code:
-    st.error("Incorrect Access Code. Please contact the research team.")
-else:
-    st.info("🔒 This study is password protected. Please enter the code above.")
+colA, colB, colC = st.columns([1, 2, 1])
+with colB:
+    if st.button("I Agree and Begin", type="primary", use_container_width=True):
+        st.switch_page("pages/2_demographics.py")

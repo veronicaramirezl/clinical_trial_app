@@ -67,6 +67,14 @@ if "user_data" in st.session_state and "participant_id" in st.session_state.user
 
         age = st.number_input("1. What is your age? *", min_value=18, max_value=110, step=1, value=None, format="%d")
         sex = st.selectbox("2. What is your biological sex? *", ["", "Male", "Female", "Intersex", "Prefer not to say"])
+        race = st.selectbox("3. What is your race/ethnicity? *", [
+            "",
+            "White",
+            "Black or African American",
+            "Hispanic or Latino",
+            "Asian",
+            "Other"
+        ])
         gender = st.selectbox("3. What is your gender identity? *", ["", "Man", "Woman", "Non-binary", "Prefer not to say"])
         edu = st.selectbox("4. Education level: *", [
             "",

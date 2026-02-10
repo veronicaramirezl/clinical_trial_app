@@ -37,3 +37,25 @@ def initialize_session_state():
         st.session_state["demographics_complete"] = False
     if "assigned_video" not in st.session_state:
         st.session_state["assigned_video"] = None
+
+
+
+def get_stratum(gender, race):
+    gender_key = gender if gender in ["Man", "Woman"] else "OtherGender"
+    race_key = race if race in ["White", "Black or African American"] else "OtherRace"
+    return f"{gender_key}_{race_key}"
+
+def get_video_counts_for_stratum(stratum):
+    """
+    Returns a dict: {video_path: count}
+    """
+    sheet = get_sheet()  # use your existing connection
+    records = sheet.get_all_records()
+
+    counts = {}
+    for r in records:
+        if r.get("stratum") == stratum:
+            v = r.get("video_url")
+            counts[v] = counts.get(v, 0) + 1
+
+    return counts

@@ -1,8 +1,11 @@
+from random import random
 import streamlit as st
 from utils.randomizer import (
-    get_random_video,
-    initialize_session_state
+    initialize_session_state,
+    get_stratum,
+    get_videos_for_stratum
 )
+
 from utils.google_sheets import save_assigned_video
 
 # -------------------------
@@ -27,7 +30,13 @@ st.title("Video Session")
 # ASSIGN VIDEO ONCE
 # -------------------------
 if st.session_state["assigned_video"] is None:
-    new_video = get_random_video()
+    gender = st.session_state["user_data"]["gender_identity"]
+    race = st.session_state["user_data"]["race"]
+
+    stratum = get_stratum(gender, race)
+    eligible_videos = get_videos_for_stratum(stratum)
+
+    new_video = random.choice(eligible_videos)
     st.session_state["assigned_video"] = new_video
 
     p_id = st.session_state["user_data"]["participant_id"]

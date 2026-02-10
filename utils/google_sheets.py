@@ -47,7 +47,7 @@ def load_participant_data(participant_id):
 
         if cell:
             row = sheet.row_values(cell.row)
-            video_url = row[28] if len(row) > 28 else None  # Column AC index=28
+            video_url = row[29] if len(row) > 29 else None  # Column AC index=29
 
             return {
                 "found": True,
@@ -86,30 +86,32 @@ def save_demographics(user_data):
             clean(user_data.get("age")),      # C (col 3)
             clean(user_data.get("sex")),      # D (col 4)
             clean(user_data.get("gender_identity")),  # E (col 5)
-            clean(user_data.get("education")),         # F (col 6)
-            clean(user_data.get("insurance")),         # G (col 7)
-            clean(user_data.get("insurance_type")),    # H (col 8)
-            clean(user_data.get("english_proficiency")), # I (col 9)
-            clean(user_data.get("income")),              # J (col 10)
-            clean(user_data.get("health_status")),       # K (col 11)
-            clean(user_data.get("chronic_conditions")),  # L (col 12)
-            clean(user_data.get("visit_frequency")),     # M (col 13)
-            clean(user_data.get("trust_web_1")),         # N (col 14)
-            clean(user_data.get("trust_web_2")),         # O (col 15)
-            clean(user_data.get("trust_web_3")),         # P (col 16)
-            clean(user_data.get("mistrust_1")),          # Q (col 17)
-            clean(user_data.get("mistrust_2")),          # R (col 18)
-            clean(user_data.get("mistrust_3")),          # S (col 19)
-            clean(user_data.get("mistrust_4")),          # T (col 20)
-            clean(user_data.get("discrim_1")),           # U (col 21)
-            clean(user_data.get("discrim_2")),           # V (col 22)
-            clean(user_data.get("discrim_3")),           # W (col 23)
-            clean(user_data.get("discrim_4")),           # X (col 24)
-            clean(user_data.get("discrim_healthcare")),  # Y (col 25)
-            clean(user_data.get("nutri_calories")),      # Z (col 26)
-            clean(user_data.get("nutri_carbs")),         # AA (col 27)
-            clean(user_data.get("nutri_protein")),       # AB (col 28)
-            ""                                           # AC (col 29) video placeholder
+            clean(user_data.get("race")),      # F (col 6)
+            clean(user_data.get("education")),         # G (col 7)
+            clean(user_data.get("insurance")),         # H (col 8)
+            clean(user_data.get("insurance_type")),    # I (col 9)
+            clean(user_data.get("english_proficiency")), # J (col 10)
+            clean(user_data.get("income")),              # K (col 11)
+            clean(user_data.get("health_status")),       # L (col 12)
+            clean(user_data.get("chronic_conditions")),  # M (col 13)
+            clean(user_data.get("visit_frequency")),     # N (col 14)
+            clean(user_data.get("trust_web_1")),         # O (col 15)
+            clean(user_data.get("trust_web_2")),         # P (col 16)
+            clean(user_data.get("trust_web_3")),         # Q (col 17)
+            clean(user_data.get("mistrust_1")),          # R (col 18)
+            clean(user_data.get("mistrust_2")),          # S (col 19)
+            clean(user_data.get("mistrust_3")),          # T (col 20)
+            clean(user_data.get("mistrust_4")),          # U (col 21)
+            clean(user_data.get("discrim_1")),           # V (col 22)
+            clean(user_data.get("discrim_2")),           # W (col 23)
+            clean(user_data.get("discrim_3")),           # X (col 24)
+            clean(user_data.get("discrim_4")),           # Y (col 25)
+            clean(user_data.get("discrim_healthcare")),  # Z (col 26)
+            clean(user_data.get("nutri_calories")),      # AA (col 27)
+            clean(user_data.get("nutri_carbs")),         # AB (col 28)
+            clean(user_data.get("nutri_protein")),       # AC (col 29)
+            "",                                           # AD (col 30) video URL placeholder
+            ""                                            # AE (col 31) stratum placeholder
         ]
 
         # Lookup row - search in column B only for efficiency
@@ -120,7 +122,7 @@ def save_demographics(user_data):
 
         if cell:
             # Update existing row - use proper range notation
-            range_notation = f"A{cell.row}:AC{cell.row}"
+            range_notation = f"A{cell.row}:AD{cell.row}"
             sheet.update(range_notation, [row_values], value_input_option='RAW')
         else:
             # Append new row
@@ -136,7 +138,7 @@ def save_demographics(user_data):
 # -------------------------------------------------------
 # SAVE VIDEO URL (Column AC = 29)
 # -------------------------------------------------------
-def save_assigned_video(participant_id, video_url):
+def save_assigned_video(participant_id, video_url, stratum):
     sheet = get_sheet()
     if not sheet:
         return
@@ -144,10 +146,27 @@ def save_assigned_video(participant_id, video_url):
     try:
         cell = sheet.find(participant_id, in_column=2)
         if cell:
-            sheet.update_cell(cell.row, 29, video_url)
+            sheet.update_cell(cell.row, 30, video_url)  # AD
+            sheet.update_cell(cell.row, 31, stratum)    # AE
 
     except Exception as e:
         print(f"Video Save Error: {e}")
+        
+def get_video_counts_for_stratum(stratum):
+    sheet = get_sheet()
+    if not sheet:
+        return {}
+
+    records = sheet.get_all_values()[1:]  # skip header
+
+    counts = {}
+    for row in records:
+        if len(row) > 30 and row[30] == stratum:  # AE index = 30
+            video = row[29]  # AD index = 29
+            if video:
+                counts[video] = counts.get(video, 0) + 1
+
+    return counts
 
 
 # -------------------------------------------------------
@@ -176,7 +195,7 @@ def save_final_survey(participant_id, survey_data):
             ]
 
             # AD is column 30, AM is column 39
-            start_col = 30   # AD
+            start_col = 32   # AF
             end_col = start_col + len(values) - 1  # AM
 
             start_a1 = gspread.utils.rowcol_to_a1(cell.row, start_col)
