@@ -3,6 +3,8 @@ from google.oauth2.service_account import Credentials
 import streamlit as st
 import datetime
 import gspread.utils
+from pathlib import Path
+from utils.randomizer import VIDEO_LIST
 
 # Google Sheets API scope
 SCOPE = [
@@ -172,6 +174,7 @@ def save_assigned_video(participant_id, video_url, stratum):
             # Batch update both cells at once for efficiency
             range_notation = f"AD{cell.row}:AE{cell.row}"
             sheet.update(range_notation, [[video_url, stratum]], value_input_option='RAW')
+            update_stratum_counts()
             return True
         else:
             st.error(f"Participant {participant_id} not found in sheet")
@@ -179,6 +182,63 @@ def save_assigned_video(participant_id, video_url, stratum):
 
     except Exception as e:
         st.error(f"Video Save Error: {e}")
+        return False
+
+
+# -------------------------------------------------------
+# UPDATE STRATUM COUNTS (Summary Sheet)
+# -------------------------------------------------------
+def update_stratum_counts():
+    """
+    Creates/updates a worksheet named 'Stratum_Counts' with counts per stratum
+    and per video assignment.
+    """
+    sheet = get_sheet()
+    if not sheet:
+        return False
+
+    try:
+        records = sheet.get_all_values()
+        if not records:
+            return False
+
+        data_rows = records[1:]  # Skip header row
+
+        counts_by_stratum = {}
+        for row in data_rows:
+            if len(row) > 30:
+                stratum = row[30]
+                video = row[29] if len(row) > 29 else ""
+                if stratum and video:
+                    counts_by_stratum.setdefault(stratum, {})
+                    counts_by_stratum[stratum][video] = counts_by_stratum[stratum].get(video, 0) + 1
+
+        video_headers = VIDEO_LIST
+        headers = ["Stratum", "Total"] + video_headers
+
+        rows = []
+        for stratum in sorted(counts_by_stratum.keys()):
+            total = sum(counts_by_stratum[stratum].values())
+            row = [stratum, str(total)]
+            row.extend(str(counts_by_stratum[stratum].get(v, 0)) for v in video_headers)
+            rows.append(row)
+
+        spreadsheet = sheet.spreadsheet
+        try:
+            summary = spreadsheet.worksheet("Stratum_Counts")
+        except gspread.WorksheetNotFound:
+            summary = spreadsheet.add_worksheet(
+                title="Stratum_Counts",
+                rows=str(max(100, len(rows) + 1)),
+                cols=str(len(headers))
+            )
+
+        summary.clear()
+        summary.update("A1", [headers] + rows, value_input_option='RAW')
+        return True
+
+    except Exception as e:
+        st.error(f"Error updating stratum counts: {e}")
         return False
 
 
