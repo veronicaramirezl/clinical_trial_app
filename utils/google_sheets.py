@@ -239,31 +239,32 @@ def save_final_survey(participant_id, survey_data):
         return False
 
     try:
-            # Clean survey data
+        cell = sheet.find(participant_id, in_column=2)  # Column B
 
         if cell:
             # Clean survey data
-            # Build data for columns AF to AR
+            def clean(v):
                 return "" if v is None else str(v)
 
+            # Build data for columns AF to AR
             values = [
-                clean(survey_data.get("Likert_1")),      # AF
-                clean(survey_data.get("Likert_2")),      # AG
-                clean(survey_data.get("Likert_3")),      # AH
-                clean(survey_data.get("Likert_4")),      # AI
-                clean(survey_data.get("Likert_5")),      # AJ
-                clean(survey_data.get("Likert_6")),      # AK
-                clean(survey_data.get("Likert_7")),      # AL
-                clean(survey_data.get("Competence")),
-                clean(survey_data.get("Perceived_Gender")),
-                clean(survey_data.get("Perceived_Race_Ethnicity")),
-                clean(survey_data.get("Perceived_AI_Generated"))
-                clean(survey_data.get("Trust_Level")),   # AN
-                clean(survey_data.get("Competence"))     # AO
-            range_notation = f"AF{cell.row}:AR{cell.row}"
+                clean(survey_data.get("Likert_1")),              # AF
+                clean(survey_data.get("Likert_2")),              # AG
+                clean(survey_data.get("Likert_3")),              # AH
+                clean(survey_data.get("Likert_4")),              # AI
+                clean(survey_data.get("Likert_5")),              # AJ
+                clean(survey_data.get("Likert_6")),              # AK
+                clean(survey_data.get("Likert_7")),              # AL
+                clean(survey_data.get("Likert_8")),              # AM
+                clean(survey_data.get("Trust_Level")),           # AN
+                clean(survey_data.get("Competence")),            # AO
+                clean(survey_data.get("Perceived_Gender")),      # AP
+                clean(survey_data.get("Perceived_Race_Ethnicity")),  # AQ
+                clean(survey_data.get("Perceived_AI_Generated")) # AR
+            ]
 
-            # AF is column 32 (index 31), AO is column 41 (index 40)
-            range_notation = f"AF{cell.row}:AO{cell.row}"
+            # AF is column 32 (index 31), AR is column 44 (index 43)
+            range_notation = f"AF{cell.row}:AR{cell.row}"
             sheet.update(range_notation, [values], value_input_option='RAW')
             
             st.success("Survey responses saved successfully")
