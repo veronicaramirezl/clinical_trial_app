@@ -141,8 +141,10 @@ def save_demographics(user_data):
             sheet.update(range_notation, [row_values], value_input_option='RAW')
             st.success(f"Updated existing record for participant {p_id}")
         else:
-            # Append new row
-            sheet.append_row(row_values, value_input_option='RAW')
+            # Insert new row at the next empty row, forcing write from column A
+            next_row = len(sheet.get_all_values()) + 1
+            range_notation = f"A{next_row}:AE{next_row}"
+            sheet.update(range_notation, [row_values], value_input_option='RAW')
             st.success(f"Created new record for participant {p_id}")
 
         return True
